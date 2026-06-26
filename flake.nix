@@ -71,5 +71,16 @@
       };
 
       formatter = forEachSupportedSystem ({ pkgs, ... }: pkgs.nixfmt);
+
+      devShells = forEachSupportedSystem (
+        { pkgs, system }:
+        {
+          default = pkgs.mkShellNoCC {
+            packages = with pkgs; [
+              self.formatter.${system}
+            ];
+          };
+        }
+      )
     };
 }
